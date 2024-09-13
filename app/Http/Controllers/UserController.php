@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User; //add this line
-use Illuminate\Support\Facades\Auth; //add this line
-use Illuminate\Support\Facades\Storage; //add this line
-use App\Models\UserBio; //add this line
-use App\Http\Controllers\UserController; //add this line
-
-
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use App\Models\UserBio;
+use App\Models\PersonalityType;
 
 class UserController extends Controller
 {
@@ -27,7 +25,7 @@ class UserController extends Controller
                 Storage::disk('public')->delete($user->profile_photo);
             }
 
-            $fileName = time().'_'.$request->file('profile_photo')->getClientOriginalName();
+            $fileName = time() . '_' . $request->file('profile_photo')->getClientOriginalName();
             $filePath = $request->file('profile_photo')->storeAs('uploads/profile_photos', $fileName, 'public');
 
             $user->profile_photo = $filePath;
@@ -41,27 +39,29 @@ class UserController extends Controller
     {
         $user = Auth::user(); // Retrieve the currently authenticated user
         $bio = $user->bio; // Access the related bio for the user
-        return view('profile.show-bio', compact('user', 'bio'));
+        $personalityTypes = PersonalityType::all(); // Retrieve all personality types
+        return view('profile.show-bio', compact('user', 'bio', 'personalityTypes'));
     }
 
     public function updateBio(Request $request)
     {
-        $user = Auth::user();
-        $bio = $user->bio;
         $request->validate([
-            'bio' => 'required|string',
+            'bio' => 'required|string|max:255',
+            'personality_type' => 'required|exists:personality_types,id',
         ]);
-        if ($bio) {
-            $bio->update([
-                'bio' => $request->input('bio'),
-            ]);
-        } else {
-            $user->bio()->create([
-                'bio' => $request->input('bio'),
-            ]);
-        }
-        return redirect()->route('profile.show-bio')
-            ->with('status', 'Bio updated successfully!');
+
+        $user = Auth::user();
+        $user->bio = $request->bio;
+        $user->personality_type_id = $request->personality_type;
+        $user->save();
+
+        return redirect()->route('profile.show-bio')->with('success', 'Bio updated successfully.');
     }
 
+    public function show($id)
+    {
+        $personalityType = PersonalityType::find($id);
+        $user = User::find($id); // or however you get the user
+        return view('show-bio', compact('personalityType', 'user'));
+    }
 }

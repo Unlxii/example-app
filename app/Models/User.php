@@ -46,9 +46,18 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function diaryEntries()
+    {
+        return $this->hasMany(DiaryEntry::class);
+    }
 
     public function bio(): HasOne
-{
-return $this->hasOne(UserBio::class, 'user_id');
-}
+    {
+        return $this->hasOne(UserBio::class, 'user_id');
+    }
+
+    public function personalityType()
+    {
+        return $this->belongsTo(PersonalityType::class);
+    }
 }
