@@ -27,8 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/display_diary', [DiaryEntryController::class, 'display_diary'])->name('diary.display_diary');
     // Route::get('/diary_count', [DiaryEntryController::class, 'diary_count'])->name('diary.diary_count');
     // Route::get('/diary/conflicting-emotions', [DiaryEntryController::class, 'conflictingEmotions'])->name('diary.conflicting_emotions');
-    Route::get('/ee', [DiaryEntryController::class, 'ee']);
-    Route::patch('/ee', [DiaryEntryController::class, 'ee']);
+    Route::get('/mockup', [DiaryEntryController::class, 'mockup'])->name('mockup');
+
 });
 
 require __DIR__ . '/auth.php';

@@ -151,17 +151,20 @@ entry updated successfully!');
     //         JOIN diary_entry_emotions ON diary_entries.id = diary_entry_emotions.diary_entry_id
     //         WHERE diary_entry_emotions.emotion_id = 2
     //         AND diary_entries.content LIKE '%happy%'
-    public function ee()
+    public function mockup()
     {
-        $userId = Auth::id();
+
         // Raw SQL query to find conflicting ee
         $entries = DB::table('diary_entries')
             ->join('diary_entry_emotions', 'diary_entries.id', '=', 'diary_entry_emotions.diary_entry_id')
+            ->join('emotions', 'emotions.id', '=', 'diary_entry_emotions.emotion_id')
             ->where('diary_entry_emotions.emotion_id', 2)
             ->where('diary_entries.content', 'LIKE', '%happy%')
             ->get();
 
-        return view('ee', compact('entries'));
+        // return response()->json(['mockup' => $entries]);
+        return view('mockup', compact('entries'));
+
     }
 
 }
