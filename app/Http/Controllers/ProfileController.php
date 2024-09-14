@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\PersonalityType;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -18,7 +19,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        $user = $request->user()->load('bio', 'personalityType'); // Load relationships
+        $user = $request->user()->load('bio', 'personalityType');
 
         return view('profile.edit', [
             'user' => $user,
@@ -103,4 +104,6 @@ class ProfileController extends Controller
 
         return view('profile.show-bio', compact('personalityTypes', 'user'));
     }
+
+    
 }

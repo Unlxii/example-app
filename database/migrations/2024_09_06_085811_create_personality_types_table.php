@@ -12,7 +12,6 @@ return new class extends Migration {
     {
         Schema::create('personality_types', function (Blueprint $table) {
             $table->id();
-            $table->string('type'); // เพิ่มคอลัมน์ type
             $table->string('name');
             $table->text('description'); // เพิ่มคอลัมน์ description
             $table->timestamps();

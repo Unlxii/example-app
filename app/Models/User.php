@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'profile_photo',
+        'personality_type_id',
     ];
 
     /**
@@ -55,6 +56,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserBio::class, 'user_id');
     }
+
 
     public function personalityType()
     {
